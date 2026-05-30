@@ -1,6 +1,11 @@
 import * as Motor from 'excalibur';
-import { CartasSpriteSheet, FondosSpriteSheet } from './recursos';
+import {CartasSpriteSheet, FondosSpriteSheet} from './recursos';
+import {CartaColor} from './CartaColor';
+import {CartaPalo} from './CartaPalo';
 
+// Row 0: Corazon (red), Row 1: Trebol (black), Row 2: Diamante (red), Row 3: Espada (black)
+//const PALO_POR_FILA: CartaPalo[] = [CartaPalo.Corazon, CartaPalo.Trebol, CartaPalo.Diamante, CartaPalo.Espada];
+//const COLOR_POR_FILA: CartaColor[] = [CartaColor.Rojo, CartaColor.Negro, CartaColor.Rojo, CartaColor.Negro];
 
 export class Carta extends Motor.Actor {
   private spriteIndex: number;
@@ -10,15 +15,26 @@ export class Carta extends Motor.Actor {
   private originalPos: Motor.Vector = Motor.vec(0, 0);
   private fondoSprite: Motor.Sprite | null = null;
 
+  public paloColor?: CartaColor;
+  public palo?: CartaPalo;
+  public valor?: number;
+
   constructor(spriteIndex: number = 0,
               fondoIndex: number = 1,
-              debug: boolean = true) {
+              debug: boolean = true,
+              palo?: CartaPalo,
+              color?: CartaColor,
+              valor?: number ) {
     super({
       name: 'Carta',
     });
     this.spriteIndex = spriteIndex;
     this.fondoIndex = fondoIndex;
     this.debug = debug;
+    //const row = Math.floor(spriteIndex / 13);
+    this.palo = palo;
+    this.paloColor = color;
+    this.valor = (spriteIndex % 13) + 1; // 1–13
   }
 
   override onInitialize(): void {

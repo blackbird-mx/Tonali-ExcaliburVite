@@ -1,5 +1,5 @@
-import { Actor, Color, Engine, Font, Label, Scene, vec } from 'excalibur';
-import { Carta } from './carta';
+import {Actor, Color, Engine, Font, Label, Scene, vec} from 'excalibur';
+import {Baraja} from './baraja';
 
 export class BarajaCompleta extends Scene {
   override onInitialize(engine: Engine): void {
@@ -12,18 +12,27 @@ export class BarajaCompleta extends Scene {
     const totalWidth = columns * (spriteWidth + padding);
     const startX = (engine.drawWidth - totalWidth) / 2 + spriteWidth / 2;
     const startY = spriteHeight / 2 + padding;
+    const baraja = new Baraja();
+    const cartas = baraja.getMazoCompleto();
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < columns; col++) {
+
         const index = row * columns + col;
-        const carta = new Carta(index, 1, false);
+        const carta = cartas[index];
+
+
         carta.pos = vec(
           startX + col * (spriteWidth + padding),
           startY + row * (spriteHeight + padding)
         );
+
         this.add(carta);
+
+
       }
     }
+
 
     // Back button
     const botonVolver = new Actor({
