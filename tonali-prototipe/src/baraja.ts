@@ -99,6 +99,63 @@ export class Baraja extends Motor.Actor {
   }
 
   /**
+   * Return all currently selected cartas in the hand.
+   */
+  getCartasSeleccionadas(): Carta[] {
+    return this.cartas.filter(c => c.selected);
+  }
+
+  /**
+   * Return all cartas currently in the hand.
+   */
+  getCartas(): Carta[] {
+    return [...this.cartas];
+  }
+
+  /**
+   * Remove selected cartas from the hand and replace them with new random cards.
+   */
+  descartarSeleccionadas(): void {
+    const seleccionadas = this.cartas.filter(c => c.selected);
+    for (const carta of seleccionadas) {
+      const idx = this.cartas.indexOf(carta);
+      if (idx !== -1) {
+        this.cartas.splice(idx, 1);
+        this.removeChild(carta);
+        carta.kill();
+      }
+    }
+    // Replace discarded cards
+    const faltan = 5 - this.cartas.length;
+    for (let i = 0; i < faltan; i++) {
+      const randomIndex = Math.floor(Math.random() * 52);
+      this.agregarCarta(this.crearCartaDesdeIndice(randomIndex));
+    }
+  }
+
+  /**
+   * Remove selected cartas from hand (after playing). Deals new cards to fill back to 5.
+   */
+  jugarSeleccionadas(): Carta[] {
+    const seleccionadas = this.cartas.filter(c => c.selected);
+    for (const carta of seleccionadas) {
+      const idx = this.cartas.indexOf(carta);
+      if (idx !== -1) {
+        this.cartas.splice(idx, 1);
+        this.removeChild(carta);
+        carta.kill();
+      }
+    }
+    // Replace played cards
+    const faltan = 5 - this.cartas.length;
+    for (let i = 0; i < faltan; i++) {
+      const randomIndex = Math.floor(Math.random() * 52);
+      this.agregarCarta(this.crearCartaDesdeIndice(randomIndex));
+    }
+    return seleccionadas;
+  }
+
+  /**
    * Remove all current cartas and deal a new random hand.
    */
   manoAleatoria(cantidad: number = 5): void {

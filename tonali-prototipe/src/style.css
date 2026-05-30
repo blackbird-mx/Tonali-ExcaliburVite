@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'GoNotoBold';
+  src: url('/fonts/GoNotoCurrent-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: black;

@@ -2,6 +2,7 @@ import * as Motor from 'excalibur';
 import {CartasSpriteSheet, FondosSpriteSheet} from './recursos';
 import {CartaColor} from './CartaColor';
 import {CartaPalo} from './CartaPalo';
+import {CartaAnimacion} from './CartaAnimacion';
 
 // Row 0: Corazon (red), Row 1: Trebol (black), Row 2: Diamante (red), Row 3: Espada (black)
 //const PALO_POR_FILA: CartaPalo[] = [CartaPalo.Corazon, CartaPalo.Trebol, CartaPalo.Diamante, CartaPalo.Espada];
@@ -14,6 +15,10 @@ export class Carta extends Motor.Actor {
   public selected: boolean = false;
   private originalPos: Motor.Vector = Motor.vec(0, 0);
   private fondoSprite: Motor.Sprite | null = null;
+  private animacionActiva: CartaAnimacion = CartaAnimacion.Ninguna;
+  private tiempoAnimacion: number = 0;
+  private animacionIndice: number = 0; // used for staggering multiple cards
+  private animacionPausada: CartaAnimacion = CartaAnimacion.Ninguna; // stored while selected
 
   public paloColor?: CartaColor;
   public palo?: CartaPalo;
@@ -43,6 +48,15 @@ export class Carta extends Motor.Actor {
     this.on('pointerdown', () => {
       if (!this.selected) {
         this.selected = true;
+        // Pause animation and reset transforms
+        this.animacionPausada = this.animacionActiva;
+        this.animacionActiva = CartaAnimacion.Ninguna;
+        this.rotation = 0;
+        this.scale = Motor.vec(1, 1);
+        this.actions.clearActions();
+        // Snap to original position before moving up (prevents diagonal movement)
+        this.pos = this.originalPos.clone();
+
         if (this.fondoSprite) {
           this.fondoSprite.tint = Motor.Color.fromHex("#B15454B5");
         }
@@ -52,7 +66,15 @@ export class Carta extends Motor.Actor {
         if (this.fondoSprite) {
           this.fondoSprite.tint = Motor.Color.Transparent;
         }
-        this.actions.easeTo(this.originalPos, 300, Motor.EasingFunctions.EaseInOutCubic);
+        this.actions.clearActions();
+        // Return to original position, then resume animation
+        this.actions.easeTo(this.originalPos, 300, Motor.EasingFunctions.EaseInOutCubic)
+          .callMethod(() => {
+            if (this.animacionPausada !== CartaAnimacion.Ninguna) {
+              this.iniciarAnimacion(this.animacionPausada, this.animacionIndice);
+              this.animacionPausada = CartaAnimacion.Ninguna;
+            }
+          });
       }
     });
 
@@ -91,5 +113,92 @@ export class Carta extends Motor.Actor {
         );
       };
     }
+  }
+
+  /**
+   * Start an idle animation on this card.
+   * @param tipo The animation type
+   * @param indice Optional index for staggering (e.g. card position in hand)
+   */
+  iniciarAnimacion(tipo: CartaAnimacion, indice: number = 0): void {
+    this.animacionActiva = tipo;
+    this.animacionIndice = indice;
+    this.tiempoAnimacion = 0;
+    // Always refresh originalPos to the current position so animations
+    // and selection use the correct reference after repositioning.
+    this.originalPos = this.pos.clone();
+
+    // One-shot animations using action sequences
+    if (tipo === CartaAnimacion.Rebotar) {
+      this.animarRebotar();
+    } else if (tipo === CartaAnimacion.Deslizar) {
+      this.animarDeslizar();
+    } else if (tipo === CartaAnimacion.Girar) {
+      this.animarGirar();
+    }
+  }
+
+  /**
+   * Stop the current animation and reset transforms.
+   */
+  detenerAnimacion(): void {
+    this.animacionActiva = CartaAnimacion.Ninguna;
+    this.tiempoAnimacion = 0;
+    // Reset any rotation/scale changes from animations
+    this.rotation = 0;
+    this.scale = Motor.vec(1, 1);
+  }
+
+  override onPreUpdate(_engine: Motor.Engine, elapsedMs: number): void {
+    if (this.animacionActiva === CartaAnimacion.Ninguna) return;
+
+    this.tiempoAnimacion += elapsedMs;
+    const t = this.tiempoAnimacion / 1000; // seconds
+    const offset = this.animacionIndice * 0.4; // stagger per card
+
+    switch (this.animacionActiva) {
+      case CartaAnimacion.Flotar:
+        // Smooth sine-wave floating up and down
+        this.pos = this.pos.clone();
+        this.pos.y = this.originalPos.y + Math.sin((t + offset) * 2) * 8;
+        break;
+
+      case CartaAnimacion.Tambalear:
+        // Wobble rotation side-to-side
+        this.rotation = Math.sin((t + offset) * 3) * 0.06;
+        break;
+
+      case CartaAnimacion.Pulsar:
+        // Breathing scale effect
+        const s = 1 + Math.sin((t + offset) * 2.5) * 0.05;
+        this.scale = Motor.vec(s, s);
+        break;
+
+      // Girar, Rebotar, Deslizar are one-shot action-based (handled in iniciarAnimacion)
+      default:
+        break;
+    }
+  }
+
+  /** Bounce in from above using action sequence */
+  private animarRebotar(): void {
+    const destino = this.pos.clone();
+    this.pos = Motor.vec(this.pos.x, this.pos.y - 300);
+    this.actions
+      .easeTo(destino.add(Motor.vec(0, 20)), 400, Motor.EasingFunctions.EaseInCubic)
+      .easeTo(destino, 200, Motor.EasingFunctions.EaseOutCubic);
+  }
+
+  /** Slide in from the left using action sequence */
+  private animarDeslizar(): void {
+    const destino = this.pos.clone();
+    this.pos = Motor.vec(this.pos.x - 600, this.pos.y);
+    this.actions
+      .easeTo(destino, 500 + this.animacionIndice * 100, Motor.EasingFunctions.EaseOutCubic);
+  }
+
+  /** Spin 360° once */
+  private animarGirar(): void {
+    this.actions.rotateBy(Math.PI * 2, Math.PI * 2); // full rotation at π*2 rad/s = 1 sec
   }
 }
