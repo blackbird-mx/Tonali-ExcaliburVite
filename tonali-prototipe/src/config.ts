@@ -61,11 +61,19 @@ export interface ModeConfig {
         handResultX: number;
         buttonsY: number;
         buttonSpacing: number;
+        buttonBaseX: number;
     };
     baraja: {
         posX: number;
         posY: number;
         cardSpacing: number;
+    };
+    gallery: {
+        columns: number;
+        paddingX: number;
+        paddingY: number;
+        backButtonX: number;
+        backButtonY: number;
     };
 }
 
@@ -78,7 +86,7 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
         height: 800,
         displayMode: DisplayMode.FitScreenAndFill,
         pixelArt: true,
-        cardScale: 0.6,  // Smaller cards for mobile
+        cardScale: 0.5,  // Smaller cards for mobile
         buttonHeight: 70,
         fontSize: {
             title: 36,
@@ -92,11 +100,19 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             handResultX: 240,
             buttonsY: 720,
             buttonSpacing: 160,
+            buttonBaseX: 240,
         },
         baraja: {
             posX: 240,
             posY: 500,
             cardSpacing: 90,
+        },
+        gallery: {
+            columns: 6,
+            paddingX: 55,
+            paddingY: 20,
+            backButtonX: 120,
+            backButtonY: 50,
         }
     },
     desktop: {
@@ -118,11 +134,19 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             handResultX: 400,
             buttonsY: 550,
             buttonSpacing: 150,
+            buttonBaseX: 300,
         },
         baraja: {
             posX: 400,
             posY: 350,
             cardSpacing: 150,
+        },
+        gallery: {
+            columns: 13,
+            paddingX: 10,
+            paddingY: 10,
+            backButtonX: 200,
+            backButtonY: 30,
         }
     }
 }

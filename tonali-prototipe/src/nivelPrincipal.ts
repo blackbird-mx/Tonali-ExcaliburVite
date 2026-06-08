@@ -3,9 +3,10 @@ import { Baraja } from "./baraja";
 import { JugadasValidas } from "./JugadasValidas";
 import { CartaAnimacion } from "./CartaAnimacion";
 import { Particulas } from "./Particulas";
-import { CONFIG, IS_MOBILE, ModeConfig } from "./config";
+import { CONFIG } from "./config";
 
-export class Nivel extends Scene {
+export class NivelPrincipal
+    extends Scene {
     private puntuacion: number = 0;
     private labelPuntuacion!: Label;
     private labelJugada!: Label;
@@ -25,11 +26,10 @@ export class Nivel extends Scene {
 
     override onInitialize(engine: Engine): void {
         // Initialize baraja with responsive positioning and card scale
-        const config = CONFIG as ModeConfig;
         this.baraja = new Baraja(
-            vec(config.baraja.posX, config.baraja.posY),
-            config.baraja.cardSpacing,
-            config.cardScale
+            vec(CONFIG.baraja.posX, CONFIG.baraja.posY),
+            CONFIG.baraja.cardSpacing,
+            CONFIG.cardScale
         );
         this.baraja.manoAleatoria(5);
         this.add(this.baraja);
@@ -93,7 +93,7 @@ export class Nivel extends Scene {
         this.add(this.labelJugada);
 
         // Button "Jugar Mano"
-        const btnBaseX = IS_MOBILE ? engine.drawWidth / 2 : 300;
+        const btnBaseX = CONFIG.layout.buttonBaseX;
         const botonJugar = new Actor({
             name: 'BotonJugarMano',
             pos: vec(btnBaseX, CONFIG.layout.buttonsY),

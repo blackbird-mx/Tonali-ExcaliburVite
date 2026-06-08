@@ -1,13 +1,11 @@
 import {Actor, Color, Engine, Font, Label, Scene, vec} from 'excalibur';
 import {Baraja} from './baraja';
-import {CONFIG, IS_MOBILE} from './config';
+import {CONFIG} from './config';
 
-export class BarajaCompleta extends Scene {
-  private mobileColumns: number;
+export class NivelTodasLasCartas extends Scene {
 
-  constructor(mobileColumns: number = 5) {
+  constructor() {
     super();
-    this.mobileColumns = mobileColumns;
   }
 
   override onInitialize(engine: Engine): void {
@@ -18,17 +16,18 @@ export class BarajaCompleta extends Scene {
     const scale = CONFIG.cardScale;
     const scaledWidth = spriteWidth * scale;
     const scaledHeight = spriteHeight * scale;
-    const padding = IS_MOBILE ? 15 : 10;
+    const paddingX = CONFIG.gallery.paddingX;
+    const paddingY = CONFIG.gallery.paddingY;
 
-    // Number of columns: configurable on mobile (default 4), 13 on desktop
-    const columns = IS_MOBILE ? this.mobileColumns : 13;
+    // Use responsive columns from config
+    const columns = CONFIG.gallery.columns;
     const rows = Math.ceil(totalCards / columns);
 
-    const totalWidth = columns * (scaledWidth + padding);
-    const totalHeight = rows * (scaledHeight + padding);
+    const totalWidth = columns * (scaledWidth + paddingX);
+    const totalHeight = rows * (scaledHeight + paddingY);
 
     // Center the grid within the engine viewport
-    const startX = (engine.drawWidth - totalWidth) / 2; // + scaledWidth / 2 ;
+    const startX = (engine.drawWidth - totalWidth) / 2 + scaledWidth / 2;
     const startY = (engine.drawHeight - totalHeight - 50) / 2 + scaledHeight / 2;
 
     const baraja = new Baraja(vec(0, 0), 100, scale);
@@ -40,17 +39,20 @@ export class BarajaCompleta extends Scene {
       const carta = cartas[i];
 
       carta.pos = vec(
-        startX + col * (scaledWidth + padding),
-        startY + row * (scaledHeight + padding)
+        startX + col * (scaledWidth + paddingX),
+        startY + row * (scaledHeight + paddingY)
       );
+
+      // Disable selection for gallery view - cards are display-only
+      carta.selectable = false;
 
       this.add(carta);
     }
 
-    // Back button
+    // Back button with responsive positioning
     const botonVolver = new Actor({
       name: 'BotonVolver',
-      pos: vec(engine.drawWidth / 4, engine.drawHeight / 2),
+      pos: vec(CONFIG.gallery.backButtonX, CONFIG.gallery.backButtonY),
       width: 150,
       height: 40,
       color: Color.fromHex('#553322'),
@@ -59,7 +61,7 @@ export class BarajaCompleta extends Scene {
     const label = new Label({
       text: 'Volver',
       pos: vec(0, 0),
-      font: new Font({ size: IS_MOBILE ? 14 : 18, color: Color.White }),
+      font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
     });
     botonVolver.addChild(label);
 

@@ -13,6 +13,7 @@ export class Carta extends Motor.Actor {
   private fondoIndex: number;
   public debug: boolean;
   public selected: boolean = false;
+  public selectable: boolean = true; // Enable/disable selection interactivity
   private originalPos: Motor.Vector = Motor.vec(0, 0);
   private fondoSprite: Motor.Sprite | null = null;
   private animacionActiva: CartaAnimacion = CartaAnimacion.Ninguna;
@@ -49,6 +50,9 @@ export class Carta extends Motor.Actor {
     this.originalPos = this.pos.clone();
 
     this.on('pointerdown', () => {
+      // Don't allow selection if selectable is disabled
+      if (!this.selectable) return;
+
       if (!this.selected) {
         this.selected = true;
         // Pause animation and reset transforms
