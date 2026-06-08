@@ -6,12 +6,16 @@ import { CartaPalo } from './CartaPalo';
 export class Baraja extends Motor.Actor {
   private cartas: Carta[] = [];
   private readonly mazoCompleto: Carta[];
+  private cardSpacing: number = 150; // Default spacing, can be overridden
+  private cardScale: number = 1.0;   // Default scale, can be overridden
 
-  constructor(pos: Motor.Vector = Motor.vec(400, 500)) {
+  constructor(pos: Motor.Vector = Motor.vec(400, 500), cardSpacing: number = 150, cardScale: number = 1.0) {
     super({
       name: 'Baraja',
       pos,
     });
+    this.cardSpacing = cardSpacing;
+    this.cardScale = cardScale;
     this.mazoCompleto = this.inicializarMazoCompleto();
   }
 
@@ -47,7 +51,7 @@ export class Baraja extends Motor.Actor {
       CartaColor.Negro,
     ];
 
-    return new Carta(index, 1, false, paloPorFila[row], colorPorFila[row], valorCarta);
+    return new Carta(index, 1, false, paloPorFila[row], colorPorFila[row], valorCarta, this.cardScale);
   }
 
   /**
@@ -89,7 +93,7 @@ export class Baraja extends Motor.Actor {
    * Spread cartas horizontally so they fan out from center.
    */
   private organizarCartas(): void {
-    const separacion = 150;
+    const separacion = this.cardSpacing;
     const totalWidth = (this.cartas.length - 1) * separacion;
     const startX = -totalWidth / 2;
 

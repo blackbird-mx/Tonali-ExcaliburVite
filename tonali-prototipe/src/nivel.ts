@@ -3,6 +3,7 @@ import { Baraja } from "./baraja";
 import { JugadasValidas } from "./JugadasValidas";
 import { CartaAnimacion } from "./CartaAnimacion";
 import { Particulas } from "./Particulas";
+import { CONFIG, IS_MOBILE, ModeConfig } from "./config";
 
 export class Nivel extends Scene {
     private puntuacion: number = 0;
@@ -23,17 +24,23 @@ export class Nivel extends Scene {
     }
 
     override onInitialize(engine: Engine): void {
-        this.baraja = new Baraja();
+        // Initialize baraja with responsive positioning and card scale
+        const config = CONFIG as ModeConfig;
+        this.baraja = new Baraja(
+            vec(config.baraja.posX, config.baraja.posY),
+            config.baraja.cardSpacing,
+            config.cardScale
+        );
         this.baraja.manoAleatoria(5);
         this.add(this.baraja);
 
         // Title "TONALI" using custom font
         const titulo = new Label({
             text: 'TONALI',
-            pos: vec(engine.drawWidth / 2, 160),
+            pos: vec(engine.drawWidth / 2, CONFIG.layout.titleY),
             font: new Font({
                 family: 'GoNotoBold',
-                size: 48,
+                size: CONFIG.fontSize.title,
                 color: Color.White,
                 bold: true,
             }),
@@ -72,31 +79,32 @@ export class Nivel extends Scene {
         // Score label
         this.labelPuntuacion = new Label({
             text: 'Puntos: 0',
-            pos: vec(120, 80),
-            font: new Font({ size: 22, color: Color.White }),
+            pos: vec(120, CONFIG.layout.scoreY),
+            font: new Font({ size: CONFIG.fontSize.label, color: Color.White }),
         });
         this.add(this.labelPuntuacion);
 
         // Hand result label
         this.labelJugada = new Label({
             text: '',
-            pos: vec(400, 80),
-            font: new Font({ size: 20, color: Color.Yellow }),
+            pos: vec(CONFIG.layout.handResultX, CONFIG.layout.handResultY),
+            font: new Font({ size: CONFIG.fontSize.label - 2, color: Color.Yellow }),
         });
         this.add(this.labelJugada);
 
         // Button "Jugar Mano"
+        const btnBaseX = IS_MOBILE ? engine.drawWidth / 2 : 300;
         const botonJugar = new Actor({
             name: 'BotonJugarMano',
-            pos: vec(300, 550),
+            pos: vec(btnBaseX, CONFIG.layout.buttonsY),
             width: 180,
-            height: 50,
+            height: CONFIG.buttonHeight,
             color: Color.fromHex('#224488'),
         });
         const labelJugar = new Label({
             text: 'Jugar Mano',
             pos: vec(0, 0),
-            font: new Font({ size: 18, color: Color.White }),
+            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
         });
         botonJugar.addChild(labelJugar);
 
@@ -130,15 +138,15 @@ export class Nivel extends Scene {
         // Button "Descartar"
         const botonDescartar = new Actor({
             name: 'BotonDescartar',
-            pos: vec(500, 550),
+            pos: vec(btnBaseX + CONFIG.layout.buttonSpacing, CONFIG.layout.buttonsY),
             width: 180,
-            height: 50,
+            height: CONFIG.buttonHeight,
             color: Color.fromHex('#882222'),
         });
         const labelDescartar = new Label({
             text: 'Descartar',
             pos: vec(0, 0),
-            font: new Font({ size: 18, color: Color.White }),
+            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
         });
         botonDescartar.addChild(labelDescartar);
 
@@ -158,15 +166,15 @@ export class Nivel extends Scene {
         // Button "Mano Aleatoria"
         const boton = new Actor({
             name: 'BotonManoAleatoria',
-            pos: vec(150, 550),
+            pos: vec(btnBaseX - CONFIG.layout.buttonSpacing, CONFIG.layout.buttonsY),
             width: 200,
-            height: 50,
+            height: CONFIG.buttonHeight,
             color: Color.fromHex('#333333'),
         });
         const label = new Label({
             text: 'Mano Aleatoria',
             pos: vec(0, 0),
-            font: new Font({ size: 18, color: Color.White }),
+            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
         });
         boton.addChild(label);
         boton.on('pointerdown', () => {
@@ -180,15 +188,15 @@ export class Nivel extends Scene {
         // Button "Baraja Completa"
         const botonBaraja = new Actor({
             name: 'BotonBarajaCompleta',
-            pos: vec(400, 30),
+            pos: vec(engine.drawWidth / 2, CONFIG.layout.titleY - 50),
             width: 200,
-            height: 50,
+            height: CONFIG.buttonHeight,
             color: Color.fromHex('#225522'),
         });
         const labelBaraja = new Label({
             text: 'Baraja Completa',
             pos: vec(0, 0),
-            font: new Font({ size: 18, color: Color.White }),
+            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
         });
         botonBaraja.addChild(labelBaraja);
         botonBaraja.on('pointerdown', () => {

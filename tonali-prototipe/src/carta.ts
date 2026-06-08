@@ -19,6 +19,7 @@ export class Carta extends Motor.Actor {
   private tiempoAnimacion: number = 0;
   private animacionIndice: number = 0; // used for staggering multiple cards
   private animacionPausada: CartaAnimacion = CartaAnimacion.Ninguna; // stored while selected
+  private cardScale: number = 1.0; // Card size scale factor
 
   public paloColor?: CartaColor;
   public palo?: CartaPalo;
@@ -29,14 +30,16 @@ export class Carta extends Motor.Actor {
               debug: boolean = true,
               palo?: CartaPalo,
               color?: CartaColor,
-              valor?: number ) {
+              valor?: number,
+              cardScale: number = 1.0 ) {
     super({
       name: 'Carta',
+      scale: Motor.vec(cardScale, cardScale),
     });
     this.spriteIndex = spriteIndex;
     this.fondoIndex = fondoIndex;
     this.debug = debug;
-    //const row = Math.floor(spriteIndex / 13);
+    this.cardScale = cardScale;
     this.palo = palo;
     this.paloColor = color;
     this.valor = (spriteIndex % 13) + 1; // 1–13
@@ -52,7 +55,7 @@ export class Carta extends Motor.Actor {
         this.animacionPausada = this.animacionActiva;
         this.animacionActiva = CartaAnimacion.Ninguna;
         this.rotation = 0;
-        this.scale = Motor.vec(1, 1);
+        this.scale = Motor.vec(this.cardScale, this.cardScale);
         this.actions.clearActions();
         // Snap to original position before moving up (prevents diagonal movement)
         this.pos = this.originalPos.clone();
@@ -144,9 +147,9 @@ export class Carta extends Motor.Actor {
   detenerAnimacion(): void {
     this.animacionActiva = CartaAnimacion.Ninguna;
     this.tiempoAnimacion = 0;
-    // Reset any rotation/scale changes from animations
+    // Reset rotation, but preserve cardScale
     this.rotation = 0;
-    this.scale = Motor.vec(1, 1);
+    this.scale = Motor.vec(this.cardScale, this.cardScale);
   }
 
   override onPreUpdate(_engine: Motor.Engine, elapsedMs: number): void {
@@ -169,8 +172,8 @@ export class Carta extends Motor.Actor {
         break;
 
       case CartaAnimacion.Pulsar:
-        // Breathing scale effect
-        const s = 1 + Math.sin((t + offset) * 2.5) * 0.05;
+        // Breathing scale effect, relative to cardScale
+        const s = this.cardScale * (1 + Math.sin((t + offset) * 2.5) * 0.05);
         this.scale = Motor.vec(s, s);
         break;
 

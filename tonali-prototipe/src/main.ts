@@ -1,16 +1,17 @@
-import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
+import { Color, Engine, FadeInOut } from "excalibur";
 import { loader } from "./recursos";
 import { Nivel } from "./nivel";
 import { BarajaCompleta } from "./BarajaCompleta";
 import { Recursos } from "./recursos";
+import { CONFIG, APP_MODE } from "./config";
 
 // Goal is to keep main.ts small and just enough to configure the engine
 
 const motor = new Engine({
-  width: 800, // Logical width and height in motor pixels
-  height: 600,
-  displayMode: DisplayMode.FitScreenAndFill, // Display mode tells excalibur how to fill the window
-  pixelArt: true, // pixelArt will turn on the correct settings to render pixel art without jaggies or shimmering artifacts
+  width: CONFIG.width,
+  height: CONFIG.height,
+  displayMode: CONFIG.displayMode,
+  pixelArt: CONFIG.pixelArt,
   scenes: {
     start: Nivel,
     barajaCompleta: BarajaCompleta
@@ -24,13 +25,13 @@ const motor = new Engine({
 
 loader.addResource(Recursos.Cartas);
 
-motor.start('start', { // name of the start scene 'start'
-  loader, // Optional loader (but needed for loading images/sounds)
-  inTransition: new FadeInOut({ // Optional in transition
+motor.start('start', {
+  loader,
+  inTransition: new FadeInOut({
     duration: 1000,
     direction: 'in',
     color: Color.ExcaliburBlue
   })
 }).then(() => {
-  // Do something after the motor starts
+  console.log(`[Tonali] Engine started in ${APP_MODE} mode`);
 });
