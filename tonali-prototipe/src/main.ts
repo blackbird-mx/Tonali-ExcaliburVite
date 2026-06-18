@@ -34,4 +34,7 @@ motor.start('start', {
   })
 }).then(() => {
   console.log(`[Tonali] Engine started in ${APP_MODE} mode`);
+  Recursos.MusicaFondo.loop = true;
+  Recursos.MusicaFondo.volume = 0.0;
+  Recursos.MusicaFondo.play();
 });

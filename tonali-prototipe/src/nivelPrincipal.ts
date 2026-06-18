@@ -4,6 +4,7 @@ import { JugadasValidas } from "./JugadasValidas";
 import { CartaAnimacion } from "./CartaAnimacion";
 import { Particulas } from "./Particulas";
 import { CONFIG } from "./config";
+import { Recursos } from "./recursos";
 
 export class NivelPrincipal
     extends Scene {
@@ -215,6 +216,55 @@ export class NivelPrincipal
             engine.goToScene('barajaCompleta');
         });
         this.add(botonBaraja);
+
+        // --- Volume controls (top-right corner) ---
+        const volX = engine.drawWidth - 80;
+        const volY = 30;
+        const btnSize = CONFIG.buttonHeight * 0.7;
+        const btnFontSize = CONFIG.fontSize.button;
+
+        const labelVolumen = new Label({
+            text: `🔊 ${Math.round(Recursos.MusicaFondo.volume * 100)}%`,
+            pos: vec(volX, volY),
+            font: new Font({ size: btnFontSize, color: Color.White }),
+        });
+        this.add(labelVolumen);
+
+        const botonVolBajar = new Actor({
+            name: 'BotonVolBajar',
+            pos: vec(volX - 60, volY + 20),
+            width: btnSize,
+            height: btnSize,
+            color: Color.fromHex('#444444'),
+        });
+        botonVolBajar.addChild(new Label({
+            text: '−',
+            pos: vec(0, 0),
+            font: new Font({ size: btnFontSize, color: Color.White }),
+        }));
+        botonVolBajar.on('pointerdown', () => {
+            Recursos.MusicaFondo.volume = Math.max(0, Math.round((Recursos.MusicaFondo.volume - 0.1) * 10) / 10);
+            labelVolumen.text = `🔊 ${Math.round(Recursos.MusicaFondo.volume * 100)}%`;
+        });
+        this.add(botonVolBajar);
+
+        const botonVolSubir = new Actor({
+            name: 'BotonVolSubir',
+            pos: vec(volX, volY + 20),
+            width: btnSize,
+            height: btnSize,
+            color: Color.fromHex('#444444'),
+        });
+        botonVolSubir.addChild(new Label({
+            text: '+',
+            pos: vec(0, 0),
+            font: new Font({ size: btnFontSize, color: Color.White }),
+        }));
+        botonVolSubir.on('pointerdown', () => {
+            Recursos.MusicaFondo.volume = Math.min(1, Math.round((Recursos.MusicaFondo.volume + 0.1) * 10) / 10);
+            labelVolumen.text = `🔊 ${Math.round(Recursos.MusicaFondo.volume * 100)}%`;
+        });
+        this.add(botonVolSubir);
     }
 
     override onPreLoad(loader: DefaultLoader): void {
