@@ -10,6 +10,8 @@ export class NivelPrincipal
     private puntuacion: number = 0;
     private labelPuntuacion!: Label;
     private labelJugada!: Label;
+    private labelDescartes!: Label;
+    private discardCount: number = 0;
     private baraja!: Baraja;
     private fuego!: Particulas;
     private fuegoTimer: ReturnType<typeof setTimeout> | null = null;
@@ -79,7 +81,7 @@ export class NivelPrincipal
         // Score label
         this.labelPuntuacion = new Label({
             text: 'Puntos: 0',
-            pos: vec(120, CONFIG.layout.scoreY),
+            pos: vec(CONFIG.layout.scoreX, CONFIG.layout.scoreY),
             font: new Font({ size: CONFIG.fontSize.label, color: Color.White }),
         });
         this.add(this.labelPuntuacion);
@@ -91,6 +93,14 @@ export class NivelPrincipal
             font: new Font({ size: CONFIG.fontSize.label - 2, color: Color.Yellow }),
         });
         this.add(this.labelJugada);
+
+        // Discard counter label
+        this.labelDescartes = new Label({
+            text: 'Descartes: 0',
+            pos: vec(CONFIG.layout.discardCounterX, CONFIG.layout.discardCounterY),
+            font: new Font({ size: CONFIG.fontSize.discardCounter, color: Color.White }),
+        });
+        this.add(this.labelDescartes);
 
         // Button "Jugar Mano"
         const btnBaseX = CONFIG.layout.buttonBaseX;
@@ -157,6 +167,8 @@ export class NivelPrincipal
                 return;
             }
             this.labelJugada.text = `Descartadas: ${seleccionadas.length}`;
+            this.discardCount++;
+            this.labelDescartes.text = `Descartes: ${this.discardCount}`;
             this.baraja.descartarSeleccionadas();
             // New cards slide in from the left
             setTimeout(() => this.animarCartas(CartaAnimacion.Deslizar), 100);
