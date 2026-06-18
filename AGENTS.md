@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- **Ignore generated Lua-TS mirror**: Do not read, modify, or reference files in `tonali-prototipe/src/TypeScriptFromLua/**` unless the user explicitly asks for that folder.
+
 ## Project Overview
 
 Tonali is a **Balatro-inspired poker card game** built with **TypeScript**, **Excalibur.js v0.32**, and **Vite**. All source code lives under `tonali-prototipe/src/`. The codebase uses Spanish naming for domain concepts (cartas, baraja, palo, etc.) — preserve this convention in all new code.
