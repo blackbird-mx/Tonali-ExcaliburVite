@@ -53,10 +53,14 @@ export interface ModeConfig {
         title: number;
         label: number;
         button: number;
+        discardCounter: number;
     };
     layout: {
         titleY: number;
         scoreY: number;
+        scoreX: number;
+        discardCounterX: number;
+        discardCounterY: number;
         handResultY: number;
         handResultX: number;
         buttonsY: number;
@@ -90,12 +94,16 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
         buttonHeight: 70,
         fontSize: {
             title: 36,
-            label: 20,
+            label: 30,
             button: 22,
+            discardCounter: 28,
         },
         layout: {
             titleY: 100,
-            scoreY: 60,
+            scoreY: 150,
+            scoreX: 50,
+            discardCounterX: 50,
+            discardCounterY: 180,
             handResultY: 60,
             handResultX: 240,
             buttonsY: 720,
@@ -126,10 +134,14 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             title: 48,
             label: 22,
             button: 18,
+            discardCounter: 20,
         },
         layout: {
             titleY: 160,
             scoreY: 80,
+            scoreX: 120,
+            discardCounterX: 650,
+            discardCounterY: 80,
             handResultY: 80,
             handResultX: 400,
             buttonsY: 550,
