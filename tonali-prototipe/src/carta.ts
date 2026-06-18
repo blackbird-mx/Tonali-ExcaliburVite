@@ -67,7 +67,7 @@ export class Carta extends Motor.Actor {
         if (this.fondoSprite) {
           this.fondoSprite.tint = Motor.Color.fromHex("#B15454B5");
         }
-        this.actions.easeTo(this.originalPos.add(Motor.vec(0, -100)), 300, Motor.EasingFunctions.EaseInOutCubic);
+        this.actions.easeTo(this.originalPos.add(Motor.vec(0, -50)), 300, Motor.EasingFunctions.EaseInOutCubic);
       } else {
         this.selected = false;
         if (this.fondoSprite) {
