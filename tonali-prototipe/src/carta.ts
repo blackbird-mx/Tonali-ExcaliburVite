@@ -1,5 +1,5 @@
 import * as Motor from 'excalibur';
-import {CartasSpriteSheet, FondosSpriteSheet} from './recursos';
+import {CartasSpriteSheet, FondosSpriteSheet, Recursos} from './recursos';
 import {CartaColor} from './CartaColor';
 import {CartaPalo} from './CartaPalo';
 import {CartaAnimacion} from './CartaAnimacion';
@@ -50,6 +50,8 @@ export class Carta extends Motor.Actor {
     this.originalPos = this.pos.clone();
 
     this.on('pointerdown', () => {
+      Recursos.CartaClick.play();
+
       // Don't allow selection if selectable is disabled
       if (!this.selectable) return;
 
