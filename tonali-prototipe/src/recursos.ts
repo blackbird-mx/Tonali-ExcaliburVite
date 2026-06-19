@@ -4,7 +4,8 @@ export const Recursos = {
     Sword: new ImageSource("./images/sword.png"),
     Cartas: new ImageSource("./images/8BitDeck.png"),
     Fondos: new ImageSource("./images/Enhancers.png"),
-    MusicaFondo: new Sound("./sound/musicaFondo.ogg")
+    MusicaFondo: new Sound("./sound/musicaFondo.ogg"),
+    CartaClick: new Sound("./sound/card1.ogg")
 } as const;
 
 export const CartasSpriteSheet = SpriteSheet.fromImageSource({
