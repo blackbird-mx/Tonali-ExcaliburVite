@@ -6,6 +6,7 @@ import { Particulas } from "./Particulas";
 import { CONFIG } from "./config";
 import { Recursos } from "./recursos";
 import { Cuadricula } from "./fondo";
+import { CajaRedondeada } from "./CajaRedondeada";
 
 export class NivelPrincipal
     extends Scene {
@@ -29,6 +30,20 @@ export class NivelPrincipal
     }
 
     override onInitialize(engine: Engine): void {
+        // UI Boxes
+        const cajaBanner = new CajaRedondeada({
+            x: 240,
+            y: 10,
+            width: 470,
+            height: 50,
+            radius: 0,
+            color: Color.White,
+            texto: 'Anuncio',
+            fontSize: 20
+        });
+
+        this.add(cajaBanner);
+
         // Background grid (hidden by default, can be shown by changing false to true)
         const rejilla = new Cuadricula(5, 5, true);
         this.add(rejilla);
