@@ -9,13 +9,15 @@ import {CartaAnimacion} from './CartaAnimacion';
 //const COLOR_POR_FILA: CartaColor[] = [CartaColor.Rojo, CartaColor.Negro, CartaColor.Rojo, CartaColor.Negro];
 
 export class Carta extends Motor.Actor {
-  private spriteIndex: number;
+  public static readonly cartasUsadas = new Set<number>();
+  public readonly spriteIndex: number;
   private fondoIndex: number;
   public debug: boolean;
   public selected: boolean = false;
   public selectable: boolean = true; // Enable/disable selection interactivity
   private originalPos: Motor.Vector = Motor.vec(0, 0);
   private fondoSprite: Motor.Sprite | null = null;
+  private faceSprite: Motor.Sprite | null = null;
   private animacionActiva: CartaAnimacion = CartaAnimacion.Ninguna;
   private tiempoAnimacion: number = 0;
   private animacionIndice: number = 0; // used for staggering multiple cards
@@ -67,7 +69,7 @@ export class Carta extends Motor.Actor {
         this.pos = this.originalPos.clone();
 
         if (this.fondoSprite) {
-          this.fondoSprite.tint = Motor.Color.fromHex("#B15454B5");
+          this.fondoSprite.tint = Motor.Color.fromHex("#224488B5");
         }
         this.actions.easeTo(this.originalPos.add(Motor.vec(0, -50)), 300, Motor.EasingFunctions.EaseInOutCubic);
       } else {
@@ -96,10 +98,12 @@ export class Carta extends Motor.Actor {
     this.fondoSprite = fondo;
 
     // Card face sprite from CartasSpriteSheet
-    const sprite = CartasSpriteSheet.getSprite(
+    const spriteOriginal = CartasSpriteSheet.getSprite(
       this.spriteIndex % 13,
       Math.floor(this.spriteIndex / 13)
     );
+    const sprite = spriteOriginal?.clone() ?? null;
+    this.faceSprite = sprite;
 
     const group = new Motor.GraphicsGroup({
       members: [
@@ -108,6 +112,7 @@ export class Carta extends Motor.Actor {
       ],
     });
     this.graphics.use(group);
+
 
     if (this.debug) {
       this.graphics.onPostDraw = (ctx) => {
@@ -121,6 +126,31 @@ export class Carta extends Motor.Actor {
           2
         );
       };
+    }
+  }
+
+  /**
+   * Tints the card red when used or discarded.
+   */
+  public tintarRojo(): void {
+    const redTint = Motor.Color.fromHex("#FFAAAA"); // Soft red tint to keep readability
+    if (this.fondoSprite) {
+      this.fondoSprite.tint = redTint;
+    }
+    if (this.faceSprite) {
+      this.faceSprite.tint = redTint;
+    }
+  }
+
+  /**
+   * Removes the red tint.
+   */
+  public quitarTintarRojo(): void {
+    if (this.fondoSprite) {
+      this.fondoSprite.tint = this.selected ? Motor.Color.fromHex("#224488B5") : Motor.Color.Transparent;
+    }
+    if (this.faceSprite) {
+      this.faceSprite.tint = undefined;
     }
   }
 

@@ -1,11 +1,24 @@
-import {Actor, Color, Engine, Font, Label, Scene, vec} from 'excalibur';
+import {Actor, Color, Engine, Font, Label, Scene, SceneActivationContext, vec} from 'excalibur';
 import {Baraja} from './baraja';
 import {CONFIG} from './config';
+import {Carta} from './carta';
 
 export class NivelTodasLasCartas extends Scene {
+  private cartasList: Carta[] = [];
 
   constructor() {
     super();
+  }
+
+  override onActivate(context: SceneActivationContext): void {
+    super.onActivate(context);
+    for (const carta of this.cartasList) {
+      if (Carta.cartasUsadas.has(carta.spriteIndex)) {
+        carta.tintarRojo();
+      } else {
+        carta.quitarTintarRojo();
+      }
+    }
   }
 
   override onInitialize(engine: Engine): void {
@@ -31,12 +44,12 @@ export class NivelTodasLasCartas extends Scene {
     const startY = (engine.drawHeight - totalHeight - 50) / 2 + scaledHeight / 2;
 
     const baraja = new Baraja(vec(0, 0), 100, scale);
-    const cartas = baraja.getMazoCompleto();
+    this.cartasList = baraja.getMazoCompleto();
 
     for (let i = 0; i < totalCards; i++) {
       const row = Math.floor(i / columns);
       const col = i % columns;
-      const carta = cartas[i];
+      const carta = this.cartasList[i];
 
       carta.pos = vec(
         startX + col * (scaledWidth + paddingX),

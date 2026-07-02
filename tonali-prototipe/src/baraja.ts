@@ -124,6 +124,7 @@ export class Baraja extends Motor.Actor {
     for (const carta of seleccionadas) {
       const idx = this.cartas.indexOf(carta);
       if (idx !== -1) {
+        Carta.cartasUsadas.add(carta.spriteIndex);
         this.cartas.splice(idx, 1);
         this.removeChild(carta);
         carta.kill();
@@ -145,6 +146,7 @@ export class Baraja extends Motor.Actor {
     for (const carta of seleccionadas) {
       const idx = this.cartas.indexOf(carta);
       if (idx !== -1) {
+        Carta.cartasUsadas.add(carta.spriteIndex);
         this.cartas.splice(idx, 1);
         this.removeChild(carta);
         carta.kill();
