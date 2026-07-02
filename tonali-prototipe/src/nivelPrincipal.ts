@@ -43,6 +43,7 @@ export class NivelPrincipal
         this.add(this.baraja);
 
         // Title "TONALI" using custom font
+        /*
         const titulo = new Label({
             text: 'TONALI',
             pos: vec(CONFIG.layout.titleX, CONFIG.layout.titleY),
@@ -56,6 +57,7 @@ export class NivelPrincipal
             }),
         });
         this.add(titulo);
+        */
 
         // Fire particle system (ambient, low intensity)
         this.fuego = new Particulas({
