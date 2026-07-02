@@ -1,4 +1,4 @@
-import { Actor, Color, DefaultLoader, Engine, ExcaliburGraphicsContext, Font, Label, Scene, SceneActivationContext, vec } from "excalibur";
+import { Actor, Color, DefaultLoader, Engine, ExcaliburGraphicsContext, Font, Label, Scene, SceneActivationContext, vec, TextAlign, BaseAlign } from "excalibur";
 import { Baraja } from "./baraja";
 import { JugadasValidas } from "./JugadasValidas";
 import { CartaAnimacion } from "./CartaAnimacion";
@@ -45,12 +45,14 @@ export class NivelPrincipal
         // Title "TONALI" using custom font
         const titulo = new Label({
             text: 'TONALI',
-            pos: vec(engine.drawWidth / 2, CONFIG.layout.titleY),
+            pos: vec(CONFIG.layout.titleX, CONFIG.layout.titleY),
             font: new Font({
                 family: 'GoNotoBold',
                 size: CONFIG.fontSize.title,
                 color: Color.White,
                 bold: true,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
             }),
         });
         this.add(titulo);
@@ -109,10 +111,9 @@ export class NivelPrincipal
         this.add(this.labelDescartes);
 
         // Button "Jugar Mano"
-        const btnBaseX = CONFIG.layout.buttonBaseX;
         const botonJugar = new Actor({
             name: 'BotonJugarMano',
-            pos: vec(btnBaseX, CONFIG.layout.buttonsY),
+            pos: vec(CONFIG.layout.botonJugarX, CONFIG.layout.botonJugarY),
             width: 180,
             height: CONFIG.buttonHeight,
             color: Color.fromHex('#224488'),
@@ -120,7 +121,12 @@ export class NivelPrincipal
         const labelJugar = new Label({
             text: 'Jugar Mano',
             pos: vec(0, 0),
-            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
+            font: new Font({
+                size: CONFIG.fontSize.button,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         });
         botonJugar.addChild(labelJugar);
 
@@ -154,7 +160,7 @@ export class NivelPrincipal
         // Button "Descartar"
         const botonDescartar = new Actor({
             name: 'BotonDescartar',
-            pos: vec(btnBaseX + CONFIG.layout.buttonSpacing, CONFIG.layout.buttonsY),
+            pos: vec(CONFIG.layout.botonDescartarX, CONFIG.layout.botonDescartarY),
             width: 180,
             height: CONFIG.buttonHeight,
             color: Color.fromHex('#882222'),
@@ -162,7 +168,12 @@ export class NivelPrincipal
         const labelDescartar = new Label({
             text: 'Descartar',
             pos: vec(0, 0),
-            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
+            font: new Font({
+                size: CONFIG.fontSize.button,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         });
         botonDescartar.addChild(labelDescartar);
 
@@ -184,7 +195,7 @@ export class NivelPrincipal
         // Button "Mano Aleatoria"
         const boton = new Actor({
             name: 'BotonManoAleatoria',
-            pos: vec(btnBaseX - CONFIG.layout.buttonSpacing, CONFIG.layout.buttonsY),
+            pos: vec(CONFIG.layout.botonManoAleatoriaX, CONFIG.layout.botonManoAleatoriaY),
             width: 200,
             height: CONFIG.buttonHeight,
             color: Color.fromHex('#333333'),
@@ -192,7 +203,12 @@ export class NivelPrincipal
         const label = new Label({
             text: 'Mano Aleatoria',
             pos: vec(0, 0),
-            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
+            font: new Font({
+                size: CONFIG.fontSize.button,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         });
         boton.addChild(label);
         boton.on('pointerdown', () => {
@@ -206,7 +222,7 @@ export class NivelPrincipal
         // Button "Baraja Completa"
         const botonBaraja = new Actor({
             name: 'BotonBarajaCompleta',
-            pos: vec(engine.drawWidth / 2, CONFIG.layout.titleY - 50),
+            pos: vec(CONFIG.layout.botonBarajaX, CONFIG.layout.botonBarajaY),
             width: 200,
             height: CONFIG.buttonHeight,
             color: Color.fromHex('#225522'),
@@ -214,7 +230,12 @@ export class NivelPrincipal
         const labelBaraja = new Label({
             text: 'Baraja Completa',
             pos: vec(0, 0),
-            font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
+            font: new Font({
+                size: CONFIG.fontSize.button,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         });
         botonBaraja.addChild(labelBaraja);
         botonBaraja.on('pointerdown', () => {
@@ -223,21 +244,24 @@ export class NivelPrincipal
         this.add(botonBaraja);
 
         // --- Volume controls (top-right corner) ---
-        const volX = engine.drawWidth - 80;
-        const volY = 30;
         const btnSize = CONFIG.buttonHeight * 0.7;
         const btnFontSize = CONFIG.fontSize.button;
 
         const labelVolumen = new Label({
             text: `🔊 ${Math.round(Recursos.MusicaFondo.volume * 100)}%`,
-            pos: vec(volX, volY),
-            font: new Font({ size: btnFontSize, color: Color.White }),
+            pos: vec(CONFIG.layout.volLabelX, CONFIG.layout.volLabelY),
+            font: new Font({
+                size: btnFontSize,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         });
         this.add(labelVolumen);
 
         const botonVolBajar = new Actor({
             name: 'BotonVolBajar',
-            pos: vec(volX - 60, volY + 20),
+            pos: vec(CONFIG.layout.volBajarX, CONFIG.layout.volBajarY),
             width: btnSize,
             height: btnSize,
             color: Color.fromHex('#444444'),
@@ -245,7 +269,12 @@ export class NivelPrincipal
         botonVolBajar.addChild(new Label({
             text: '−',
             pos: vec(0, 0),
-            font: new Font({ size: btnFontSize, color: Color.White }),
+            font: new Font({
+                size: btnFontSize,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         }));
         botonVolBajar.on('pointerdown', () => {
             Recursos.MusicaFondo.volume = Math.max(0, Math.round((Recursos.MusicaFondo.volume - 0.1) * 10) / 10);
@@ -255,7 +284,7 @@ export class NivelPrincipal
 
         const botonVolSubir = new Actor({
             name: 'BotonVolSubir',
-            pos: vec(volX, volY + 20),
+            pos: vec(CONFIG.layout.volSubirX, CONFIG.layout.volSubirY),
             width: btnSize,
             height: btnSize,
             color: Color.fromHex('#444444'),
@@ -263,7 +292,12 @@ export class NivelPrincipal
         botonVolSubir.addChild(new Label({
             text: '+',
             pos: vec(0, 0),
-            font: new Font({ size: btnFontSize, color: Color.White }),
+            font: new Font({
+                size: btnFontSize,
+                color: Color.White,
+                textAlign: TextAlign.Center,
+                baseAlign: BaseAlign.Middle
+            }),
         }));
         botonVolSubir.on('pointerdown', () => {
             Recursos.MusicaFondo.volume = Math.min(1, Math.round((Recursos.MusicaFondo.volume + 0.1) * 10) / 10);

@@ -56,16 +56,28 @@ export interface ModeConfig {
         discardCounter: number;
     };
     layout: {
+        titleX: number;
         titleY: number;
-        scoreY: number;
         scoreX: number;
+        scoreY: number;
         discardCounterX: number;
         discardCounterY: number;
-        handResultY: number;
         handResultX: number;
-        buttonsY: number;
-        buttonSpacing: number;
-        buttonBaseX: number;
+        handResultY: number;
+        botonJugarX: number;
+        botonJugarY: number;
+        botonDescartarX: number;
+        botonDescartarY: number;
+        botonManoAleatoriaX: number;
+        botonManoAleatoriaY: number;
+        botonBarajaX: number;
+        botonBarajaY: number;
+        volLabelX: number;
+        volLabelY: number;
+        volBajarX: number;
+        volBajarY: number;
+        volSubirX: number;
+        volSubirY: number;
     };
     baraja: {
         posX: number;
@@ -99,16 +111,28 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             discardCounter: 28,
         },
         layout: {
+            titleX: 240,
             titleY: 100,
-            scoreY: 150,
             scoreX: 50,
+            scoreY: 150,
             discardCounterX: 50,
             discardCounterY: 180,
-            handResultY: 60,
             handResultX: 240,
-            buttonsY: 720,
-            buttonSpacing: 160,
-            buttonBaseX: 240,
+            handResultY: 60,
+            botonJugarX: 240,
+            botonJugarY: 720,
+            botonDescartarX: 400,
+            botonDescartarY: 720,
+            botonManoAleatoriaX: 80,
+            botonManoAleatoriaY: 720,
+            botonBarajaX: 240,
+            botonBarajaY: 50,
+            volLabelX: 400,
+            volLabelY: 30,
+            volBajarX: 340,
+            volBajarY: 50,
+            volSubirX: 400,
+            volSubirY: 50,
         },
         baraja: {
             posX: 240,
@@ -137,16 +161,28 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             discardCounter: 20,
         },
         layout: {
+            titleX: 400,
             titleY: 160,
-            scoreY: 80,
             scoreX: 120,
+            scoreY: 80,
             discardCounterX: 650,
             discardCounterY: 80,
-            handResultY: 80,
             handResultX: 400,
-            buttonsY: 550,
-            buttonSpacing: 150,
-            buttonBaseX: 300,
+            handResultY: 80,
+            botonJugarX: 300,
+            botonJugarY: 550,
+            botonDescartarX: 450,
+            botonDescartarY: 550,
+            botonManoAleatoriaX: 150,
+            botonManoAleatoriaY: 550,
+            botonBarajaX: 400,
+            botonBarajaY: 110,
+            volLabelX: 720,
+            volLabelY: 30,
+            volBajarX: 660,
+            volBajarY: 50,
+            volSubirX: 720,
+            volSubirY: 50,
         },
         baraja: {
             posX: 400,
