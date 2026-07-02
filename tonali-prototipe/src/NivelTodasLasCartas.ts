@@ -1,7 +1,8 @@
-import {Actor, Color, Engine, Font, Label, Scene, SceneActivationContext, vec} from 'excalibur';
+import {Actor, Color, Engine, Font, Label, Scene, SceneActivationContext, vec, TextAlign, BaseAlign} from 'excalibur';
 import {Baraja} from './baraja';
 import {CONFIG} from './config';
 import {Carta} from './carta';
+import {Cuadricula} from './fondo';
 
 export class NivelTodasLasCartas extends Scene {
   private cartasList: Carta[] = [];
@@ -22,6 +23,9 @@ export class NivelTodasLasCartas extends Scene {
   }
 
   override onInitialize(engine: Engine): void {
+    const rejilla = new Cuadricula(5, 5, true);
+    this.add(rejilla);
+
     const totalCards = 52;
     const spriteWidth = 47;
     const spriteHeight = 95;
@@ -74,7 +78,12 @@ export class NivelTodasLasCartas extends Scene {
     const label = new Label({
       text: 'Volver',
       pos: vec(0, 0),
-      font: new Font({ size: CONFIG.fontSize.button, color: Color.White }),
+      font: new Font({
+        size: CONFIG.fontSize.button,
+        color: Color.White,
+        textAlign: TextAlign.Center,
+        baseAlign: BaseAlign.Middle
+      }),
     });
     botonVolver.addChild(label);
 
