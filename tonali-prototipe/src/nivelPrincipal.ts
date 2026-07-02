@@ -5,6 +5,7 @@ import { CartaAnimacion } from "./CartaAnimacion";
 import { Particulas } from "./Particulas";
 import { CONFIG } from "./config";
 import { Recursos } from "./recursos";
+import { Cuadricula } from "./fondo";
 
 export class NivelPrincipal
     extends Scene {
@@ -28,6 +29,10 @@ export class NivelPrincipal
     }
 
     override onInitialize(engine: Engine): void {
+        // Background grid (hidden by default, can be shown by changing false to true)
+        const rejilla = new Cuadricula(5, 5, true);
+        this.add(rejilla);
+
         // Initialize baraja with responsive positioning and card scale
         this.baraja = new Baraja(
             vec(CONFIG.baraja.posX, CONFIG.baraja.posY),
