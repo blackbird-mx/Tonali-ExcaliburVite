@@ -7,6 +7,7 @@ import { CONFIG } from "./config";
 import { Recursos } from "./recursos";
 import { Cuadricula } from "./fondo";
 import { CajaRedondeada } from "./CajaRedondeada";
+import puntosNiveles from "./puntosNiveles.json";
 
 export class NivelPrincipal
     extends Scene {
@@ -15,9 +16,15 @@ export class NivelPrincipal
     private labelJugada!: Label;
     private labelDescartes!: Label;
     private discardCount: number = 0;
+    private labelMano!: Label;
+    private manosJugadas: number = 0;
     private baraja!: Baraja;
     private fuego!: Particulas;
     private fuegoTimer: ReturnType<typeof setTimeout> | null = null;
+    private animacionPuntosId: number | null = null;
+    private duracionAnimacionPuntos: number = 0.3; // Duración parametrizable de la animación de puntos en segundos
+    private nivel: number = 1;
+    private labelRequeridos!: Label;
 
     /**
      * Apply an animation to all current cards in the hand.
@@ -42,7 +49,20 @@ export class NivelPrincipal
             fontSize: 20
         });
 
+
+        const cajaCabecera = new CajaRedondeada({
+            x: 240,
+            y: 100,
+            width : 470,
+            height: 100,
+            radius: 0,
+            color: Color.Black,
+            texto: '',
+            fontSize: 20
+        });
+
         this.add(cajaBanner);
+        this.add(cajaCabecera);
 
         // Background grid (hidden by default, can be shown by changing false to true)
         const rejilla = new Cuadricula(5, 5, true);
@@ -127,6 +147,23 @@ export class NivelPrincipal
         });
         this.add(this.labelDescartes);
 
+        // Mano counter label
+        this.labelMano = new Label({
+            text: 'Mano: 0',
+            pos: vec(CONFIG.layout.manoX, CONFIG.layout.manoY),
+            font: new Font({ size: CONFIG.fontSize.discardCounter, color: Color.White }),
+        });
+        this.add(this.labelMano);
+
+        // Requeridos counter label
+        const puntosRequeridos = puntosNiveles.niveles.find(n => n.nivel === this.nivel)?.puntos ?? 500;
+        this.labelRequeridos = new Label({
+            text: `Requeridos: ${puntosRequeridos}`,
+            pos: vec(CONFIG.layout.requeridosX, CONFIG.layout.requeridosY),
+            font: new Font({ size: CONFIG.fontSize.discardCounter, color: Color.White }),
+        });
+        this.add(this.labelRequeridos);
+
         // Button "Jugar Mano"
         const botonJugar = new Actor({
             name: 'BotonJugarMano',
@@ -153,12 +190,15 @@ export class NivelPrincipal
                 this.labelJugada.text = 'Selecciona cartas!';
                 return;
             }
+            this.manosJugadas++;
+            this.labelMano.text = `Mano: ${this.manosJugadas}`;
             // Spin selected cards before removing
             seleccionadas.forEach((c, i) => c.iniciarAnimacion(CartaAnimacion.Girar, i));
             const resultado = JugadasValidas.evaluar(seleccionadas);
             if (resultado.valida) {
+                const puntuacionAnterior = this.puntuacion;
                 this.puntuacion += resultado.puntos;
-                this.labelPuntuacion.text = `Puntos: ${this.puntuacion}`;
+                this.animarPuntos(puntuacionAnterior, this.puntuacion);
                 this.labelJugada.text = `${resultado.nombre} (+${resultado.puntos})`;
                 // Intensify fire for 5 seconds on valid hand
                 this.intensificarFuego();
@@ -349,6 +389,36 @@ export class NivelPrincipal
 
     override onPostDraw(ctx: ExcaliburGraphicsContext, elapsedMs: number): void {
         // Called after Excalibur draws to the screen
+    }
+
+    /**
+     * Animates the score text counting up from the old value to the new value over a given duration.
+     * @param valorInicial Start value of the points counter.
+     * @param valorFinal End value of the points counter.
+     * @param duracionSegundos Animation duration in seconds.
+     */
+    private animarPuntos(valorInicial: number, valorFinal: number, duracionSegundos: number = this.duracionAnimacionPuntos): void {
+        if (this.animacionPuntosId !== null) {
+            cancelAnimationFrame(this.animacionPuntosId);
+        }
+
+        const tiempoInicio = performance.now();
+        const duracionMs = duracionSegundos * 1000;
+
+        const actualizar = (tiempoActual: number) => {
+            const transcurrido = tiempoActual - tiempoInicio;
+            if (transcurrido >= duracionMs) {
+                this.labelPuntuacion.text = `Puntos: ${valorFinal}`;
+                this.animacionPuntosId = null;
+            } else {
+                const progreso = transcurrido / duracionMs;
+                const valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) * progreso);
+                this.labelPuntuacion.text = `Puntos: ${valorActual}`;
+                this.animacionPuntosId = requestAnimationFrame(actualizar);
+            }
+        };
+
+        this.animacionPuntosId = requestAnimationFrame(actualizar);
     }
 
     /**

@@ -2,6 +2,7 @@ import { Color, Engine, FadeInOut } from "excalibur";
 import { loader } from "./recursos";
 import { NivelPrincipal } from "./nivelPrincipal";
 import { NivelTodasLasCartas } from "./NivelTodasLasCartas";
+import { NivelGameOver } from "./NivelGameOver";
 import { Recursos } from "./recursos";
 import { CONFIG, APP_MODE } from "./config";
 
@@ -14,7 +15,8 @@ const motor = new Engine({
   pixelArt: CONFIG.pixelArt,
   scenes: {
     start: NivelPrincipal,
-    barajaCompleta: NivelTodasLasCartas
+    barajaCompleta: NivelTodasLasCartas,
+    gameOver: NivelGameOver
   },
   // physics: {
   //   solver: SolverStrategy.Realistic,
