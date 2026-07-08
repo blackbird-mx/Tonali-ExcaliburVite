@@ -1,0 +1,44 @@
+{
+  "niveles": [
+    {
+      "nivel": 1,
+      "puntos": 500
+    },
+    {
+      "nivel": 2,
+      "puntos": 600
+    },
+    {
+      "nivel": 3,
+      "puntos": 700
+    },
+    {
+      "nivel": 4,
+      "puntos": 800
+    },
+    {
+      "nivel": 5,
+      "puntos": 900
+    },
+    {
+      "nivel": 6,
+      "puntos": 1000
+    },
+    {
+      "nivel": 7,
+      "puntos": 1100
+    },
+    {
+      "nivel": 8,
+      "puntos": 1200
+    },
+    {
+      "nivel": 9,
+      "puntos": 1300
+    },
+    {
+      "nivel": 10,
+      "puntos": 1400
+    }
+  ]
+}
