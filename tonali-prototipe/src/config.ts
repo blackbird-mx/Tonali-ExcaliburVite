@@ -64,6 +64,10 @@ export interface ModeConfig {
         discardCounterY: number;
         handResultX: number;
         handResultY: number;
+        manoX: number;
+        manoY: number;
+        requeridosX: number;
+        requeridosY: number;
         botonJugarX: number;
         botonJugarY: number;
         botonDescartarX: number;
@@ -114,11 +118,15 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             titleX: 240,
             titleY: 100,
             scoreX: 50,
-            scoreY: 150,
+            scoreY: 70,
             discardCounterX: 50,
-            discardCounterY: 180,
+            discardCounterY: 150,
             handResultX: 50,
-            handResultY: 210,
+            handResultY: 180,
+            manoX: 50,
+            manoY: 210,
+            requeridosX: 50,
+            requeridosY: 100,
             botonJugarX: 240,
             botonJugarY: 720,
             botonDescartarX: 400,
@@ -169,6 +177,10 @@ export const ENGINE_CONFIG: Record<'mobile' | 'desktop', ModeConfig> = {
             discardCounterY: 80,
             handResultX: 400,
             handResultY: 80,
+            manoX: 650,
+            manoY: 110,
+            requeridosX: 120,
+            requeridosY: 110,
             botonJugarX: 300,
             botonJugarY: 550,
             botonDescartarX: 450,
