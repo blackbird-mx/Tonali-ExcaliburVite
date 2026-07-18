@@ -53,19 +53,41 @@ export class NivelPrincipal
         const cajaCabecera = new CajaRedondeada({
             x: 240,
             y: 100,
+            z: -10,
             width : 470,
             height: 100,
             radius: 0,
-            color: Color.Black,
-            texto: '',
+            color: Color.fromHex('#F5D061'),
             fontSize: 20
         });
 
+        const cajaPuntuacion = new CajaRedondeada({
+            x: 180,
+            y: 105,
+            z: -9,
+            width: 300,
+            height: 70,
+            radius: 10,
+            color: Color.fromHex('#556B2F')
+        });
+
+        const cajaRonda = new CajaRedondeada({
+            x: 400,
+            y: 105,
+            z: -8,
+            width: 120,
+            height: 70,
+            radius: 10,
+            color: Color.Black
+        })
+
         this.add(cajaBanner);
         this.add(cajaCabecera);
+        this.add(cajaPuntuacion);
+        this.add(cajaRonda);
 
         // Background grid (hidden by default, can be shown by changing false to true)
-        const rejilla = new Cuadricula(5, 5, true);
+        const rejilla = new Cuadricula(5, 5, false);
         this.add(rejilla);
 
         // Initialize baraja with responsive positioning and card scale
