@@ -14,6 +14,7 @@ export interface CajaRedondeadaOptions {
   fontColor?: Motor.Color;
   fontSize?: number;
   fontFamily?: string;
+  z?: number;
 }
 
 /**
@@ -37,6 +38,7 @@ export class CajaRedondeada extends Motor.Actor {
       pos: Motor.vec(options.x, options.y),
       width: options.width,
       height: options.height,
+      z: options.z,
     });
 
     this.boxWidth = options.width;
